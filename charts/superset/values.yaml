@@ -1,0 +1,11 @@
+bootstrapScript: |
+  #!/bin/bash
+  pip install \
+    elasticsearch-dbapi==0.2.10 &&\
+  if [ ! -f ~/bootstrap ]; then echo "Running Superset with uid {{ .Values.runAsUser }}" > ~/bootstrap; fi
+
+service:
+  type: LoadBalancer
+  port: 80
+  nodePort:
+    http: ""
