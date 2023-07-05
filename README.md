@@ -10,7 +10,7 @@ to Kubernetes in minutes! 🎉
 
 > To proceed with this tutorial, you need to be familiar in using the command
 > line from your operating system. Being familiar with Kubernetes basic
-> concepts would be a plus to completely understand every steps of this
+> concepts would be a plus to completely understand every step of this
 > tutorial.
 
 ## Prerequisites
@@ -80,7 +80,7 @@ nodepool-08a7421c-46bf-4fe4-b6-node-d8d327   Ready    <none>   12m   v1.26.4
 ```
 
 This tells us that our cluster has three active nodes running Kubernetes
-`1.16.4` since few minutes.
+`1.26.4` since few minutes.
 
 We will now create our own Kubernetes namespace to work on:
 
@@ -108,7 +108,7 @@ kubectl get pods
 ## Deploy applications
 
 In this tutorial, we will deploy a full learning analytics stack but also a
-Learning Management System (LMS) that generates learning traces and send them
+Learning Management System (LMS) that generates learning traces and sends them
 to the Learning Record Store (LRS) in xAPI format. The LRS stores learning
 traces in an Elasticsearch cluster that will be set as the primary datasource
 of a generalist dashboarding system: Apache Superset.
@@ -186,7 +186,7 @@ helm repo update
 helm install elastic-operator elastic/eck-operator -n elastic-system --create-namespace
 ```
 
-Since CRDs are already deployed cluter-wide, we will now be able to deploy a
+Since CRDs are already deployed cluster-wide, we will now be able to deploy a
 two-nodes elasticsearch "cluster":
 
 ```sh
@@ -215,14 +215,14 @@ spec:
           - name: elasticsearch
             env:
               - name: ES_JAVA_OPTS
-                value: -Xms256m -Xmx512m
+                value: -Xms512m -Xmx512m
             resources:
               requests:
-                memory: 200Mi
+                memory: 512Mi
                 cpu: 0.5
               limits:
-                memory: 500Mi
-                cpu: 1
+                memory: 2Gi
+                cpu: 2
 ```
 
 Once applied, your elasticsearch pod should be running. You can check this using the following command:
@@ -288,7 +288,7 @@ should substitute the `XXXXXXXXX` pattern by the value of the
 `${ELASTIC_PASSWORD}` shell variable:
 
 ```yaml
-#  charts/ralph/values.yaml
+# charts/ralph/values.yaml
 envSecrets:
   # Replace the XXXXXXXXX value by elastic user password
   RALPH_BACKENDS__DATABASE__ES__HOSTS: https://elastic:XXXXXXXXX@data-lake-es-http:9200
