@@ -29,8 +29,10 @@ workshop in a working directory:
 # Go to your usual working directory
 cd ${HOME}/work
 
-# Clone this project
+# Clone this project, either with SSH:
 git clone git@github.com:openfun/k8s-la-stack-tutorial.git
+# or with HTTPS:
+git clone https://github.com/openfun/k8s-la-stack-tutorial.git
 
 # Go to our tutorial working directory
 cd k8s-la-stack
@@ -107,15 +109,24 @@ kubectl get pods
 
 ## Deploy applications
 
-In this tutorial, we will deploy a full learning analytics stack but also a
-Learning Management System (LMS) that generates learning traces and sends them
-to the Learning Record Store (LRS) in xAPI format. The LRS stores learning
-traces in an Elasticsearch cluster that will be set as the primary datasource
-of a generalist dashboarding system: Apache Superset.
+In this tutorial, we will deploy a full learning analytics stack composed of
+the following components:
+
+- **Learning Record Store (LRS)**, here [Ralph](https://github.com/openfun/ralph);
+- **Database/datalake**, here [Elasticsearch](https://github.com/elastic/elasticsearch);
+- **Dashboard system**, here [Superset](https://github.com/apache/superset).
+
+Additionally, we will also deploy a Learning Management System (LMS), here
+[Moodle](https://github.com/moodle/moodle).
+
+The Moodle LMS generates learning traces and send them to the Ralph LRS in xAPI
+format. The LRS stores learning traces in an Elasticsearch cluster that will be
+set as the primary datasource of a generalist dashboarding system: Apache
+Superset.
 
 ```mermaid
 flowchart LR
-    lms[Moodle] -- xAPI --> lrs[Ralph] --> data[(Elasticsearch)] --> dashboard[Superset]
+    lms[Moodle - LMS] -- xAPI --> lrs[Ralph - LRS] --> data[(Elasticsearch - DB)] --> dashboard[Superset - dashboards]
 ```
 
 ### LMS: Moodle:tm:
@@ -126,7 +137,14 @@ Moodle:tm: can be installed using Helm in a single line of code:
 helm install lms oci://registry-1.docker.io/bitnamicharts/moodle
 ```
 
-> 💡 Note that can take few minutes before the service is up and running.
+> 💡 Note that it can take a few minutes before the service is up and running.
+
+> 💡 Also note that, sometimes, on clusters with fewer resources, the Moodle
+> pod happen to be stuck while the MariaDB pod is ready: either wait for the
+> Moodle pod to restart, or restart it with the command:
+> `kubectl delete pods -l app.kubernetes.io/name=moodle`
+
+
 
 You can check deployment status using the `kubectl get pods -w` command. In a
 similar way, the load balancer may take some time to be available, you can
