@@ -1,5 +1,4 @@
 envSecrets:
-  RALPH_BACKENDS__DATABASE__ES__HOSTS: https://elastic:XXXXXXXXX@data-lake-es-http:9200
   RALPH_BACKENDS__DATABASE__ES__INDEX: statements
   RALPH_BACKENDS__DATABASE__ES__CLIENT_OPTIONS__ca_certs: "/usr/local/share/ca-certificates/ca.crt"
   RALPH_BACKENDS__DATABASE__ES__CLIENT_OPTIONS__verify_certs: "true"
