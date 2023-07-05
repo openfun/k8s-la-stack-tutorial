@@ -274,7 +274,10 @@ Ralph is also distributed as a Helm chart that can be deployed with a single
 line of code:
 
 ```sh
-helm install --values charts/ralph/values.yaml lrs oci://registry-1.docker.io/openfuncharts/ralph
+helm install \
+    --values charts/ralph/values.yaml \
+    --set envSecrets.RALPH_BACKENDS__DATABASE__ES__HOSTS=https://elastic:"${ELASTIC_PASSWORD}"@data-lake-es-http:9200 \
+    lrs oci://registry-1.docker.io/openfuncharts/ralph
 ```
 
 > 💡 You are now familiar with the procedure: you can check Ralph deployment
@@ -301,20 +304,6 @@ curl --user admin:password "http://${LRS_IP}/whoami"
 > terminal to open it with your default web browser. HTTP Basic Auth
 > credentials are `admin` for the login and `password` for the password.
 
-Edit `charts/ralph/values.yaml` to update the `elastic` user password: you
-should substitute the `XXXXXXXXX` pattern by the value of the
-`${ELASTIC_PASSWORD}` shell variable:
-
-```yaml
-# charts/ralph/values.yaml
-envSecrets:
-  # Replace the XXXXXXXXX value by elastic user password
-  RALPH_BACKENDS__DATABASE__ES__HOSTS: https://elastic:XXXXXXXXX@data-lake-es-http:9200
-# [...]
-```
-
-> 💡 To get the `elastic` user password, run the following command from your
-> terminal: `echo "elastic user password: ${ELASTIC_PASSWORD}"`
 
 To test our deployment, we will send 22 batches of 1k statements to the LRS:
 
