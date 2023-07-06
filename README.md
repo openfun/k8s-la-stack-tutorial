@@ -35,7 +35,7 @@ git clone git@github.com:openfun/k8s-la-stack-tutorial.git
 git clone https://github.com/openfun/k8s-la-stack-tutorial.git
 
 # Go to our tutorial working directory
-cd k8s-la-stack
+cd k8s-la-stack-tutorial
 ```
 
 We will now check that we are able to connect to the target Kubernetes cluster.
